@@ -27,7 +27,7 @@ public class TcpTransportServer implements IFSM, Runnable, Cloneable {
 	public TcpTransportServer(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public void setId(int id) {
 		this.id = id;
@@ -49,13 +49,13 @@ public class TcpTransportServer implements IFSM, Runnable, Cloneable {
 	@Override
 	public void start() {
 		if (runner == null) {
-		    try {
+			try {
 				server = new ServerSocket(serverPort);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		    runner = new Thread(this);
-		    runner.start();
+			runner = new Thread(this);
+			runner.start();
 		}
 	}
 
@@ -64,10 +64,10 @@ public class TcpTransportServer implements IFSM, Runnable, Cloneable {
 		try {
 			for(Socket s: connectedSockets)
 				s.close();
-		    Thread.sleep(500);
-		    server.close();
+			Thread.sleep(500);
+			server.close();
 		} catch (Exception e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 		runner.interrupt();
 	}
@@ -127,8 +127,7 @@ public class TcpTransportServer implements IFSM, Runnable, Cloneable {
 		}
 	}
 	private void sendToStream(String msg, OutputStream output) throws Exception{
-		int x = -1;
-		char eof = (char)(x);
+		char eof = (char)(0);
 		msg = msg + eof;
 		var byts = msg.getBytes();
 		output.write(byts,0, byts.length);
@@ -167,7 +166,7 @@ public class TcpTransportServer implements IFSM, Runnable, Cloneable {
 					recString = "";
 					while((rec = fromClient.read()) > 0){
 
-						if((char)rec == (char)(-1) )
+						if((char)rec == (char)(0))
 							break;
 						else{
 							recString += (char)rec;
@@ -182,8 +181,6 @@ public class TcpTransportServer implements IFSM, Runnable, Cloneable {
 
 				String fromAddress = sockaddr.getAddress().toString().replace("/","");
 				fromAddress += ":" + sockaddr.getPort();
-
-				//System.out.println("primio: " + recString);
 				IMessage receivedMsg = new Message();
 				var bytes = recString.getBytes();
 				receivedMsg.parseTransportMessage(bytes, bytes.length);

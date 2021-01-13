@@ -82,9 +82,7 @@ public class TcpTransportClient implements IFSM, Runnable, Cloneable {
 
 
 	private void sendToStream(String msg, OutputStream output) throws Exception{
-		int x = -1;
-		char eof = (char)(x);
-		System.out.println();
+		char eof = (char)(0);
 		msg = msg + eof;
 		var byts = msg.getBytes();
 		output.write(byts,0, byts.length);
@@ -151,8 +149,7 @@ public class TcpTransportClient implements IFSM, Runnable, Cloneable {
 					int rec;
 					recString = "";
 					while((rec = fromClient.read()) > 0){
-
-						if((char)rec == (char)(-1) )
+						if((char)rec == (char)(0))
 							break;
 						else{
 							recString += (char)rec;
@@ -180,7 +177,7 @@ public class TcpTransportClient implements IFSM, Runnable, Cloneable {
 			}
 
 			connectionSocket.close();
-			System.out.println("TCP disconected from server!");
+			//System.out.println("TCP disconected from server!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
